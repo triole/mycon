@@ -1,19 +1,39 @@
 #![allow(unused_imports)]
+#![deny(warnings)]
 extern crate futures;
 extern crate hyper;
+extern crate hyper_tls;
 extern crate tokio_core;
+
+extern crate regex;
+use self::regex::Regex;
 
 use std::io::{self, Write};
 use std::iter;
-use self::futures::{stream, Future, Stream};
+// use self::futures::{stream, Future, Stream};
+use self::hyper::rt::{self, Future, Stream};
 use self::hyper::Client;
-// use tokio_core::reactor::Core;
 
+use self::hyper::client::HttpConnector;
+use self::hyper_tls::HttpsConnector;
 
-pub fn get_url(url: &str) -> impl Future<Item=(), Error=()> {
+pub fn get_url(url: &str) {
+    rt::run(fetch_url(url));
+}
+
+fn fetch_url(url: &str) -> impl Future<Item = (), Error = ()> {
     let uri: self::hyper::Uri = url.parse().unwrap();
-    let client = Client::new();
 
+    // connector init
+    let http;
+    if is_https(url) == true {
+        http = HttpsConnector::new(4).expect("TLS initialization failed");
+    } else {
+        http = HttpConnector::new(4);
+    }
+
+    // client init
+    let client = Client::builder().build::<_, hyper::Body>(http);
     client
         // Fetch the url...
         .get(uri)
@@ -40,35 +60,14 @@ pub fn get_url(url: &str) -> impl Future<Item=(), Error=()> {
         })
 }
 
+// --- utils
+fn is_https(url: &str) -> bool {
+    let re = Regex::new("^https.*").unwrap();
+    return re.is_match(url);
+}
 
-
-// fn get_url() {
-//     // still inside rt::run...
-// let client = Client::new();
-//
-// let uri = "http://httpbin.org/ip".parse().unwrap();
-//
-// client
-//     .get(uri)
-//     .and_then(|res| {
-//         println!("Response: {}", res.status());
-//         res
-//             .into_body()
-//             // Body is a stream, so as each chunk arrives...
-//             .for_each(|chunk| {
-//                 io::stdout()
-//                     .write_all(&chunk)
-//                     .map_err(|e| {
-//                         panic!("example expects stdout is open, error={}", e)
-//                     })
-//             })
-//     })
-//     .map_err(|err| {
-//         println!("Error: {}", err);
-//     })
-//
-// }
-//
-// // fn main() {
-// //     get_url();
-// // }
+#[test]
+fn test_is_https() {
+    assert_eq!(is_https("http://blabla.org"), false);
+    assert_eq!(is_https("https://blabla.org"), true);
+}
