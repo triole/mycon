@@ -1,0 +1,13 @@
+{
+	"ip_services": [
+		"https://api.ipify.org",
+		"https://jsonip.com",
+		"https://wtfismyip.com/json",
+		"http://ipecho.net/plain",
+		"https://ident.me",
+		"http://icanhazip.com",
+		"http://myip.dnsomatic.com",
+		"http://bot.whatismyipaddress.com",
+		"https://api.ipify.org?format=text"
+	]
+}
