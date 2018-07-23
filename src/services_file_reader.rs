@@ -8,6 +8,7 @@ use serde_json;
 use serde_derive;
 
 
+#[derive(Debug)]
 pub struct IP {
     ip_current: String,
     ip_services: Vec<String>,
@@ -19,40 +20,26 @@ struct IPServices {
 }
 
 impl IP{
-    pub fn init() {
-        let ips = Self::deserialize();
-        println!("{:?}", ips);
-
+    pub fn init() -> IP{
+        let ip_services = Self::get_ip_services();
+        // println!("{:?}",ip_services.ip_services);
+        let ip = IP{
+            ip_current: "hhaa".to_string(),
+            ip_services: ip_services,
+        };
+        return ip;
     }
 
-    fn deserialize() -> IPServices{
+    fn get_ip_services() -> Vec<String>{
         let bytes = include_bytes!("services_list.json");
-        let ip_services: IPServices = serde_json::from_slice(bytes).unwrap();
-        println!("{:#?}", ip_services);
+        let ips: IPServices = serde_json::from_slice(bytes).unwrap();
+        let ip_services = ips.ip_services;
         return ip_services;
     }
 }
 
 
-// fn read_ipservices() -> Vec<String> {
-    // let filename = get_filepath_formation_json(formation);
-    // let fb = include_bytes!("ipservices.json");
-
-    // let filename = "ipservices.json";
-    // let s = read_js_to_string(&filename);
-    // let ipservices: Vec<String> = from_str(&s).unwrap();
-    // return ipservices;
-// }
-
-fn read_js_to_string(filename: &str) -> String {
-    let mut s = String::new();
-    File::open(filename)
-        .unwrap()
-        .read_to_string(&mut s)
-        .unwrap();
-    return s;
-}
-
+// --- tests
 #[cfg(test)]
 mod tests {
 

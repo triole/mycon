@@ -12,6 +12,8 @@ use  services_file_reader::IP;
 
 
 fn main() {
-    let ipservices = IP::init();
-    println!("{:?}",ipservices);
+    println!("{:?}", "Running application...");
+
+    let ip = IP::init();
+    println!("{:?}",ip);
 }
