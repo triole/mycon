@@ -5,6 +5,10 @@ authors = ["olaf michaelis <o.mic@web.de>"]
 
 
 [dependencies]
+# requester
+futures = "0.1.23"
+hyper = "0.12.6"
+tokio-core = "0.1.17"
 
 # serde json
 serde = "1.0.69"
