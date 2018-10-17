@@ -18,19 +18,15 @@ use self::hyper::client::HttpConnector;
 use self::hyper_tls::HttpsConnector;
 
 pub fn get_url(url: &str) {
-    rt::run(fetch_url(url));
+    let full_url = "https://".to_owned() + url;
+    rt::run(fetch_url(&full_url));
 }
 
 fn fetch_url(url: &str) -> impl Future<Item = (), Error = ()> {
     let uri: self::hyper::Uri = url.parse().unwrap();
 
     // connector init
-    let http;
-    if is_https(url) == true {
-        http = HttpsConnector::new(4).expect("TLS initialization failed");
-    } else {
-        http = HttpConnector::new(4);
-    }
+    let http = HttpsConnector::new(4).expect("TLS initialization failed");
 
     // client init
     let client = Client::builder().build::<_, hyper::Body>(http);

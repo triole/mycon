@@ -23,7 +23,7 @@ impl IP {
         let ip_services = Self::get_ip_services();
         // println!("{:?}",ip_services.ip_services);
         let ip = IP {
-            ip_current: "hhaa".to_string(),
+            ip_current: "unknown".to_string(),
             ip_services: ip_services,
         };
         return ip;

@@ -13,12 +13,11 @@ mod services_file_reader;
 use services_file_reader::IP;
 
 fn main() {
-    println!("{:#?}", "Running application...");
+    println!("{}", "Running application...");
 
     let ip = IP::init();
-    println!("{:#?}", ip);
 
-    println!("{:#?}", "Making request...");
     let rs = requester::get_url(&ip.ip_services[0]);
+
     // println!("{:?}", rs);
 }
