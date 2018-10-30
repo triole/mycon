@@ -1,0 +1,10 @@
+ip_retrieval_services:
+    - https://api.ipify.org
+    - https://jsonip.com
+    - https://wtfismyip.com/json
+    - https://ipecho.net/plain
+    - https://ident.me
+    - https://icanhazip.com
+    - https://myip.dnsomatic.com
+    - https://bot.whatismyipaddress.com
+    - https://api.ipify.org?format=text

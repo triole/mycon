@@ -1,23 +1,22 @@
-#![allow(dead_code)]
-
-// serde json
-extern crate serde;
 #[macro_use]
 extern crate serde_derive;
-extern crate serde_json;
+extern crate serde_yaml;
+
+#[macro_use]
+extern crate clap;
 
 // my packages
-mod requester;
-
-mod services_file_reader;
-use services_file_reader::IP;
+mod argparse;
+mod env;
+mod fetch;
 
 fn main() {
-    println!("{}", "Running application...");
+    let env = env::Env::init();
+    env.fill();
 
-    let ip = IP::init();
+    // let ip = services_file_reader::IP::init();
+    // let config = config::read(&env::config_file());
+    println!("{:#?}", env);
 
-    let rs = requester::get_url(&ip.ip_services[0]);
-
-    // println!("{:?}", rs);
+    // fetch::channelize(ip.ip_services);
 }
