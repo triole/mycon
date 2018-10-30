@@ -13,18 +13,19 @@ use argparse;
 
 #[derive(Clone, Debug)]
 pub struct Env {
-    config: Config,
-    args: Args,
+    pub config: Config,
+    pub args: Args,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-struct Config {
-    ip_retrieval_services: Vec<String>,
+pub struct Config {
+    pub ip_retrieval_services: Vec<String>,
 }
 
-#[derive(Clone, Debug)]
-struct Args {
-    verbose: bool,
+#[derive(Clone, Copy, Debug)]
+pub struct Args {
+    pub verbose: bool,
+    pub debug: bool,
 }
 
 impl Env {
@@ -36,6 +37,7 @@ impl Env {
             config: Self::read_config(),
             args: Args {
                 verbose: argparse::bool(&args, "verbose"),
+                debug: argparse::bool(&args, "debug"),
             },
         };
     }

@@ -4,9 +4,10 @@ use std::sync::mpsc;
 use std::sync::mpsc::{Receiver, Sender};
 use std::thread;
 
+use env;
 use fetch;
 
-pub fn channelize(urls: Vec<String>) {
+pub fn channelize(urls: Vec<String>, args: env::Args) {
     let threads: i32 = urls.len() as i32;
     let (tx, rx): (Sender<String>, Receiver<String>) = mpsc::channel();
 
@@ -23,27 +24,31 @@ pub fn channelize(urls: Vec<String>) {
 
             // Sending is a non-blocking operation, the thread will continue
             // immediately after sending its message
-            println!("thread {} finished", url);
+            if args.verbose == true || args.verbose == false {
+                println!("Request finished: {}", url);
+            }
         });
         children.push(child);
     }
 
-    let mut ids = Vec::with_capacity(threads as usize);
+    let mut results = Vec::with_capacity(threads as usize);
     for _ in 0..threads {
         // `recv` will block the current thread if there are no messages available
-        ids.push(rx.recv());
-        if 1 == 1 {
-            break;
-        }
+        results.push(rx.recv());
+
+        // break because we do only deal with the first response/result
+        break;
     }
 
-    // wait for the threads to complete any remaining work
-    for child in children {
-        child.join().expect("oops! the child thread panicked");
-    }
+    // wait for the threads to complete any remaining work, but in this case we
+    // do not want to wait for all thread, because we wanna process the first result immediately
+    // for child in children {
+    //     child.join().expect("oops! the child thread panicked");
+    // }
 
     // Show the order in which the messages were sent
-    println!("{:?}", ids);
+    let r = results[0].to_owned().unwrap();
+    println!("External IP is: {}", r);
 }
 
 pub fn fetch_url(url: &str) -> String {

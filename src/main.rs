@@ -12,10 +12,5 @@ mod fetch;
 
 fn main() {
     let env = env::Env::init();
-
-    // let ip = services_file_reader::IP::init();
-    // let config = config::read(&env::config_file());
-    println!("{:#?}", env);
-
-    // fetch::channelize(ip.ip_services);
+    fetch::channelize(env.config.ip_retrieval_services, env.args);
 }
