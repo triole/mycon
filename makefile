@@ -4,18 +4,16 @@ TARGET_BUILD=${TARGET_FOLDER}/${APP_NAME}
 COMMIT_NO=$(shell git rev-list --all --count)
 
 ARGS_SRC="config/args.yaml"
-ARGS_TRG="target/args.yaml"
+ARGS_TRG=".argsprod.yaml"
 
-all: run_test run_build
-build: run_build
+all: make_args run_test run_build
+build: make_args run_build
 test: run_test
 
-
-run_build:
-	# replace version in args.yaml
+make_args:
 	cat "${ARGS_SRC}" | sed '/version/s/\.X\"/\.${COMMIT_NO}\"/g' > ${ARGS_TRG}
 
-	# build binary
+run_build:
 	cargo build --release
 	mkdir -p ${TARGET_FOLDER}
 	mv "target/release/${APP_NAME}" "${TARGET_BUILD}"
