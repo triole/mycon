@@ -7,10 +7,11 @@ extern crate clap;
 
 // my packages
 mod argparse;
+mod channelize;
 mod env;
-mod fetch;
+mod util;
 
 fn main() {
     let env = env::Env::init();
-    fetch::channelize(env.config.ip_retrieval_services, env.args);
+    channelize::work(env.config.ip_retrieval_services, env.args);
 }

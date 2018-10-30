@@ -30,7 +30,7 @@ pub struct Args {
 
 impl Env {
     pub fn init() -> Self {
-        let yaml = load_yaml!("args.yaml");
+        let yaml = load_yaml!("../target/args.yaml");
         let args = clap::App::from_yaml(yaml).get_matches();
 
         return Env {
