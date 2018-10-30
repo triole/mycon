@@ -12,7 +12,6 @@ mod fetch;
 
 fn main() {
     let env = env::Env::init();
-    env.fill();
 
     // let ip = services_file_reader::IP::init();
     // let config = config::read(&env::config_file());

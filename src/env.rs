@@ -11,41 +11,38 @@ use std::process;
 
 use argparse;
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct Env {
     config: Config,
     args: Args,
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, Default)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 struct Config {
     ip_retrieval_services: Vec<String>,
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 struct Args {
     verbose: bool,
 }
 
 impl Env {
-    pub fn init() -> Env {
-        Env::default()
-    }
-
-    pub fn fill(&self) -> Env {
+    pub fn init() -> Self {
         let yaml = load_yaml!("args.yaml");
         let args = clap::App::from_yaml(yaml).get_matches();
 
         return Env {
-            config: self.read_config(),
+            config: Self::read_config(),
             args: Args {
                 verbose: argparse::bool(&args, "verbose"),
             },
         };
     }
 
-    fn read_config(&self) -> Config {
-        let filename = self.config_file();
+    fn read_config() -> Config {
+        let config_file = Self::curexe().to_string() + ".yaml";
+        let filename = config_file;
         let path = Path::new(&filename);
         let display = path.display();
 
@@ -65,12 +62,8 @@ impl Env {
         return config;
     }
 
-    fn curexe(&self) -> String {
+    fn curexe() -> String {
         let c = current_exe().unwrap();
         return c.into_os_string().into_string().unwrap();
-    }
-
-    fn config_file(&self) -> String {
-        return self.curexe().to_string() + ".yaml";
     }
 }
