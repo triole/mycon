@@ -3,17 +3,18 @@ extern crate ureq;
 
 use self::regex::Regex;
 
-pub fn get_ip(s: &str) -> String {
-    return rx_find("(?:\\\\d{1,3}\\\\.){3}\\\\d{1,3}", s);
-}
-
-fn rx_find(rx_str: &str, searched_str: &str) -> String {
+pub fn rx_find(rx_str: &str, searched_str: &str) -> String {
     let re = Regex::new(rx_str).unwrap();
     let caps = re.captures(searched_str);
     match caps {
         Some(caps) => caps[0].to_string(),
         None => String::new(),
     }
+}
+
+pub fn rx_match(rx_str: &str, s: &str) -> bool {
+    let re = Regex::new(rx_str).unwrap();
+    return re.is_match(s);
 }
 
 pub fn fetch_url(url: &str) -> String {

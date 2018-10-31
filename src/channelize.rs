@@ -3,11 +3,11 @@ use std::sync::mpsc::{Receiver, Sender};
 use std::thread;
 
 use env;
-use util;
+use fetch_ip;
 
 pub fn work(urls: Vec<String>, args: env::Args) {
     let threads: i32 = urls.len() as i32;
-    let (tx, rx): (Sender<String>, Receiver<String>) = mpsc::channel();
+    let (tx, rx): (Sender<fetch_ip::Fetch>, Receiver<fetch_ip::Fetch>) = mpsc::channel();
 
     let mut children = Vec::new();
     for url in urls {
@@ -18,7 +18,7 @@ pub fn work(urls: Vec<String>, args: env::Args) {
         let child = thread::spawn(move || {
             // The thread takes ownership over `thread_tx`
             // Each thread queues a message in the channel
-            thread_tx.send({ util::fetch_url(&url) }).unwrap();
+            thread_tx.send({ fetch_ip::Fetch::init(&url) }).unwrap();
 
             // Sending is a non-blocking operation, the thread will continue
             // immediately after sending its message
@@ -45,6 +45,6 @@ pub fn work(urls: Vec<String>, args: env::Args) {
     // }
 
     // Show the order in which the messages were sent
-    let r = results[0].to_owned().unwrap();
-    println!("External IP is: {}", r);
+    let r = results[0].clone();
+    println!("External IP is: {:#?}", r);
 }

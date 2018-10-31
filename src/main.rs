@@ -9,6 +9,7 @@ extern crate clap;
 mod argparse;
 mod channelize;
 mod env;
+mod fetch_ip;
 mod util;
 
 fn main() {
