@@ -6,20 +6,23 @@ COMMIT_NO=$(shell git rev-list --all --count)
 ARGS_SRC="config/args.yaml"
 ARGS_TRG=".argsprod.yaml"
 
-all: make_args run_test run_build
-build: make_args run_build
-test: run_test
+all: make_args do_test do_build do_benchmark
+benchmark: do_benchmark
+build: make_args do_build do_benchmark
+test: do_test
 
 make_args:
 	cat "${ARGS_SRC}" | sed '/version/s/\.X\"/\.${COMMIT_NO}\"/g' > ${ARGS_TRG}
 
-run_build:
+do_benchmark:
+	hyperfine "${TARGET_BUILD}"
+
+do_build:
 	cargo build --release
 	mkdir -p ${TARGET_FOLDER}
 	mv "target/release/${APP_NAME}" "${TARGET_BUILD}"
 	strip "${TARGET_BUILD}"
 	cp config/${APP_NAME}.yaml ${TARGET_FOLDER}/
-	hyperfine "${TARGET_BUILD}"
 
-run_test:
+do_test:
 	cargo test
