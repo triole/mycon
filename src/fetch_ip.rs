@@ -1,3 +1,5 @@
+use std::time::{Duration, Instant};
+
 use util;
 
 #[derive(Debug, Clone)]
@@ -7,19 +9,23 @@ pub struct Fetch {
     pub status: u16,
     pub ip: String,
     pub valid: bool,
+    pub duration: Duration,
 }
 
 impl Fetch {
     pub fn init(url: &str) -> Self {
+        let start = Instant::now();
         let response = Self::get(&url);
         let ip = Self::extract_ip(&response.1);
         let valid = Self::validate_ip(&ip, &response.0);
+        let duration = start.elapsed();
         return Fetch {
             url: url.to_string(),
             body: response.1,
             status: response.0,
             ip: ip,
             valid: valid,
+            duration: duration,
         };
     }
 

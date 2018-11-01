@@ -24,8 +24,7 @@ pub struct Config {
 
 #[derive(Clone, Copy, Debug)]
 pub struct Args {
-    pub verbose: bool,
-    pub debug: bool,
+    pub check: bool,
 }
 
 impl Env {
@@ -36,8 +35,7 @@ impl Env {
         return Env {
             config: Self::read_config(),
             args: Args {
-                verbose: argparse::bool(&args, "verbose"),
-                debug: argparse::bool(&args, "debug"),
+                check: argparse::bool(&args, "check"),
             },
         };
     }

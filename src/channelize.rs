@@ -5,7 +5,7 @@ use std::thread;
 use env;
 use fetch_ip;
 
-pub fn work(urls: Vec<String>, _args: env::Args) {
+pub fn work(urls: Vec<String>, _args: env::Args) -> fetch_ip::Fetch {
     let nthreads: i32 = urls.len() as i32;
     let (tx, rx): (Sender<fetch_ip::Fetch>, Receiver<fetch_ip::Fetch>) = mpsc::channel();
 
@@ -40,8 +40,5 @@ pub fn work(urls: Vec<String>, _args: env::Args) {
     //     child.join().expect("oops! the child thread panicked");
     // }
 
-    // print result
-    let r = results[results.len() - 1].clone();
-    println!("Reponse from: {}", r.url);
-    println!("External IP : {}", r.ip);
+    return results[results.len() - 1].clone();
 }
