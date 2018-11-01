@@ -1,5 +1,4 @@
 use clap;
-use clap::{App, ArgMatches};
 
 use serde_yaml;
 use std::env::current_exe;
