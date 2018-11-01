@@ -17,7 +17,7 @@ pub fn rx_match(rx_str: &str, s: &str) -> bool {
     return re.is_match(s);
 }
 
-pub fn fetch_url(url: &str) -> String {
+pub fn fetch_url(url: &str) -> (u16, String) {
     // sync post request of some json.
     let mut req = ureq::get(url)
         .set("X-My-Header", "Secret")
@@ -25,6 +25,7 @@ pub fn fetch_url(url: &str) -> String {
         .timeout_connect(2000)
         .to_owned();
     let response = req.call();
-    let r = response.into_string().unwrap();
-    return r;
+    let status = response.status();
+    let body = response.into_string().unwrap();
+    return (status, body);
 }
