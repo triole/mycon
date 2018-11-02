@@ -8,3 +8,6 @@ ip_retrieval_services:
     - http://myip.dnsomatic.com
     - http://bot.whatismyipaddress.com
     - http://api.ipify.org?format=text
+
+more_information: http://ip-api.com/line
+tor_check_url: https://check.torproject.org/?lang=en_EN'

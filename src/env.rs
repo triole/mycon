@@ -19,11 +19,14 @@ pub struct Env {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Config {
     pub ip_retrieval_services: Vec<String>,
+    pub more_information: String,
+    pub tor_check_url: String,
 }
 
 #[derive(Clone, Copy, Debug)]
 pub struct Args {
     pub check: bool,
+    pub long: bool,
 }
 
 impl Env {
@@ -35,6 +38,7 @@ impl Env {
             config: Self::read_config(),
             args: Args {
                 check: argparse::bool(&args, "check"),
+                long: argparse::bool(&args, "long"),
             },
         };
     }

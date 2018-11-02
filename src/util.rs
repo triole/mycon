@@ -29,3 +29,18 @@ pub fn fetch_url(url: &str) -> (u16, String) {
     let body = response.into_string().unwrap();
     return (status, body);
 }
+
+pub fn tor_stats(torcheck_url: &str) -> (bool, String) {
+    let (_, body) = fetch_url(&torcheck_url);
+    let enabled = rx_match("Congratulations.*to use Tor", &body);
+    let ip = rx_find("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}", &body);
+    let mut msg: String = String::new();
+    if enabled == true {
+        msg.push_str("Tor is up and running.");
+    } else {
+        msg.push_str("You are not using Tor.");
+    }
+    msg.push_str("\nYour IP appears to be ");
+    msg.push_str(&ip);
+    return (enabled, msg);
+}
