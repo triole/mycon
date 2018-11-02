@@ -20,7 +20,7 @@ fn main() {
     if env.args.long == true {
         let (_, con) = util::fetch_url(&env.config.more_information);
         let (_, msg) = util::tor_stats(&env.config.tor_check_url);
-        println!("{}\n{}\n", con, msg);
+        println!("\n{}\n{}\n", con, msg);
 
     // or standard behaviour
     } else {
