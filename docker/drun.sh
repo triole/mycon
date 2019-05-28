@@ -1,7 +1,6 @@
 #!/bin/bash
 
 cd projects/source
-
 rustup target add x86_64-unknown-linux-musl
 
 cargo clean
