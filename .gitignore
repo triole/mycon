@@ -3,3 +3,5 @@ target/
 **/*.rs.bk
 .argsprod.yaml
 Cargo.lock
+
+docker-compose.yaml

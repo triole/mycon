@@ -1,0 +1,24 @@
+version: "3.7"
+
+volumes:
+    source:
+        name: <APP_NAME>_source
+        driver_opts:
+            type: none
+            device: <CURDIR>
+            o: bind
+    libs:
+        name: <APP_NAME>_lib
+        driver_opts:
+            type: none
+            device: <OLIBDIR>
+            o: bind
+
+services:
+    rust:
+        build:
+            context: ./docker
+        container_name: rust-<APP_NAME>
+        volumes:
+            - source:/home/rust/src/projects/source
+            - libs:/home/rust/src/libraries
