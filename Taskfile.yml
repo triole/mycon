@@ -1,0 +1,39 @@
+version: '3'
+
+
+tasks:
+    default:
+        cmds:
+            - task: test
+            - task: build
+
+    prep:
+        cmds:
+            - cmd: rustup target add x86_64-unknown-linux-musl
+
+    build:
+        sources:
+            - src/*.rs
+        method: timestamp
+        cmds:
+            - cmd: mkdir -p target/x86_64-unknown-linux-gnu/release/
+            - cmd: >-
+                cp
+                config/mycon.yaml
+                target/x86_64-unknown-linux-gnu/release/
+            - cmd: cargo build --release
+            - cmd: cp target/x86_64-unknown-linux-gnu/release/mycon* build/
+            - cmd: rm build/mycon.d
+
+    test:
+        cmds:
+            - cmd: cargo test
+
+    run:
+        cmds:
+            - cmd: mkdir -p target/x86_64-unknown-linux-gnu/debug/
+            - cmd: >-
+                cp
+                config/mycon.yaml
+                target/x86_64-unknown-linux-gnu/debug/
+            - cmd: cargo run

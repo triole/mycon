@@ -2,6 +2,7 @@ build/
 target/
 **/*.rs.bk
 .argsprod.yaml
+.cargo/*
 Cargo.lock
 
 docker-compose.yaml
