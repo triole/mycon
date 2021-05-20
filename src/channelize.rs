@@ -17,7 +17,7 @@ pub fn work(urls: Vec<String>, _args: env::Args) -> fetch_ip::Fetch {
         let child = thread::spawn(move || {
             // thread takes ownership over `thread_tx`, each thread queues message in channel
             // sending is non-blocking operation, thread will continue after sending its message
-            thread_tx.send({ fetch_ip::Fetch::init(&url) }).unwrap();
+            thread_tx.send(fetch_ip::Fetch::init(&url)).unwrap();
         });
 
         children.push(child);

@@ -16,20 +16,20 @@ impl Fetch {
     pub fn init(url: &str) -> Self {
         let start = Instant::now();
         let response = Self::get(&url);
-        let ip = Self::extract_ip(&response.1);
-        let valid = Self::validate_ip(&ip, &response.0);
+        let ip = Self::extract_ip(&response.0);
+        let valid = Self::validate_ip(&ip, &response.1);
         let duration = start.elapsed();
         return Fetch {
             url: url.to_string(),
-            body: response.1,
-            status: response.0,
+            body: response.0,
+            status: response.1,
             ip: ip,
             valid: valid,
             duration: duration,
         };
     }
 
-    fn get(url: &str) -> (u16, String) {
+    fn get(url: &str) -> (String, u16) {
         return util::fetch_url(url);
     }
 
