@@ -35,8 +35,6 @@ tasks:
         method: timestamp
         cmds:
             - cmd: mkdir -p target/{{.TARGET}}/release/
-            - cmd: >-
-                cp config/mycon.yaml target/{{.TARGET}}/release/
             - cmd: cargo build --release
             - cmd: cp target/{{.TARGET}}/release/{{.APP_NAME}}* build/
             - cmd: rm build/{{.APP_NAME}}.d
