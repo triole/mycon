@@ -1,47 +1,28 @@
 # Mycon
+
+<!--- mdtoc: toc begin -->
+
+1.	[Synopsis](#synopsis)
+2.	[Config](#config)
+3.	[Examples](#examples)<!--- mdtoc: toc end -->
+
 ## Synopsis
-My connection stat tool that in example displays information like the own ip.
 
-## Rust Channels example
-We'll be trying to utilize this...
-```rust
-use std::sync::mpsc::{Sender, Receiver};
-use std::sync::mpsc;
-use std::thread;
+Mycon is a fast external ip retrieval tool. It fires multiple parallel requests and prints the first valid answer.
 
-static NTHREADS: i32 = 3;
+## Config
 
-fn main() {
-    // Channels have two endpoints: the `Sender<T>` and the `Receiver<T>`,
-    // where `T` is the type of the message to be transferred
-    // (type annotation is superfluous)
-    let (tx, rx): (Sender<i32>, Receiver<i32>) = mpsc::channel();
+There is a configuration file `config/mycon.yaml`. It contains several web services that provide the external ip. These are the ones that `mycon` calls.
 
-    for id in 0..NTHREADS {
-        // The sender endpoint can be copied
-        let thread_tx = tx.clone();
+## Examples
 
-        // Each thread will send its id via the channel
-        thread::spawn(move || {
-            // The thread takes ownership over `thread_tx`
-            // Each thread queues a message in the channel
-            thread_tx.send(id).unwrap();
+Simplest use looks like this
 
-            // Sending is a non-blocking operation, the thread will continue
-            // immediately after sending its message
-            println!("thread {} finished", id);
-        });
-    }
-
-    // Here, all the messages are collected
-    let mut ids = Vec::with_capacity(NTHREADS as usize);
-    for _ in 0..NTHREADS {
-        // The `recv` method picks a message from the channel
-        // `recv` will block the current thread if there are no messages available
-        ids.push(rx.recv());
-    }
-
-    // Show the order in which the messages were sent
-    println!("{:?}", ids);
-}
 ```
+$ mycon
+Reponse from: http://ident.me
+Duration    : 0,102 sec
+External IP : 111.22.111.22
+```
+
+Run `mycon -h` for help.
