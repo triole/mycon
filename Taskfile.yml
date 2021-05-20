@@ -1,14 +1,32 @@
 version: '3'
 
+vars:
+    CURDIR:
+        sh: pwd
+
+    APP_NAME:
+        sh: cat Cargo.toml | grep -Po "(?<=name\s=\s\")[a-zA-Z0-9-_]+"
+
+    TARGET: x86_64-unknown-linux-gnu
+
+    TARGET_FOLDER: build
+
+    COMMIT_NO:
+        sh: git rev-list --all --count
 
 tasks:
     default:
         cmds:
+            - task: prep
             - task: test
             - task: build
 
     prep:
         cmds:
+            - cmd: mkdir -p {{.TARGET_FOLDER}}
+            - cmd: cp config/{{.APP_NAME}}.yaml {{.TARGET_FOLDER}}/
+            - cmd: mkdir -p target/debug
+            - cmd: cp config/{{.APP_NAME}}.yaml target/debug/
             - cmd: rustup target add x86_64-unknown-linux-musl
 
     build:
@@ -16,14 +34,12 @@ tasks:
             - src/*.rs
         method: timestamp
         cmds:
-            - cmd: mkdir -p target/x86_64-unknown-linux-gnu/release/
+            - cmd: mkdir -p target/{{.TARGET}}/release/
             - cmd: >-
-                cp
-                config/mycon.yaml
-                target/x86_64-unknown-linux-gnu/release/
+                cp config/mycon.yaml target/{{.TARGET}}/release/
             - cmd: cargo build --release
-            - cmd: cp target/x86_64-unknown-linux-gnu/release/mycon* build/
-            - cmd: rm build/mycon.d
+            - cmd: cp target/{{.TARGET}}/release/{{.APP_NAME}}* build/
+            - cmd: rm build/{{.APP_NAME}}.d
 
     test:
         cmds:
@@ -31,9 +47,5 @@ tasks:
 
     run:
         cmds:
-            - cmd: mkdir -p target/x86_64-unknown-linux-gnu/debug/
-            - cmd: >-
-                cp
-                config/mycon.yaml
-                target/x86_64-unknown-linux-gnu/debug/
+            - task: prep
             - cmd: cargo run
